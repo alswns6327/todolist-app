@@ -1,7 +1,7 @@
 <template>
   <div>
-    <InputTodo @add-todo="addTodo"/>
-    <TodoList @toggle-completed="toggleCompleted" @delete-todo="deleteTodo" :todoList="todoList"/>
+    <InputTodo/>
+    <TodoList :todoList="todoList"/>
   </div>
 </template>
 
@@ -22,6 +22,11 @@ import TodoList from './components/TodoList.vue';
                 {id : ts+3, todo:"o", completed: false}
             ]
         };
+    },
+    created(){
+        this.emitter.on('add-todo', this.addTodo);
+        this.emitter.on('delete-todo', this.deleteTodo);
+        this.emitter.on('toggle-completed', this.toggleCompleted);
     },
     methods: {
         addTodo(todo) {

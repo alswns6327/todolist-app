@@ -20,11 +20,11 @@
                 todo : ""
             }
         },
-        emits : ["add-todo"],
+        // emits : ["add-todo"],
         methods : {
             addTodoHandler(){
                 if(this.todo.trim().length >= 3){
-                    this.$emit("add-todo", {id : new Date().getTime, todo: this.todo, completed : false});
+                    this.emitter.emit("add-todo", {id : new Date().getTime, todo: this.todo, completed : false});
                     this.todo = "";
                 }else{
                     alert("3자 이상 입력");
