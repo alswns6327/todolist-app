@@ -2,24 +2,24 @@
     <div class="row">
         <div class="col">
             <div class="list-group">
-                <TodoListItem v-for="todoItem in todoList" :key="todoItem.id" :todoItem="todoItem"
+                <TodoListItem 
+                    @delete-todo="$emit('delete-todo', $event)" 
+                    @toggle-completed="$emit('toggle-completed', $event)" 
+                    v-for="todoItem in todoList" :key="todoItem.id" :todoItem="todoItem"
                 />
             </div>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
     import TodoListItem from './TodoListItem.vue';
 
-    export default {
-    name: "TodoList",
-    components: { TodoListItem },
-    props : {
+    const props = defineProps({
         todoList : {type : Array, required : true}
-    },
-    // emits:["delete-todo", "toggle-completed"],
-}
+    });
+    
+    const emit = defineEmits(['delete-todo', 'toggle-completed'])
 </script>
 
 <style scoped>

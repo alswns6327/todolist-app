@@ -12,26 +12,19 @@
     </div>
 </template>
 
-<script>
-    export default {
-        name : "InputTodo",
-        data(){
-            return{
-                todo : ""
-            }
-        },
-        // emits : ["add-todo"],
-        methods : {
-            addTodoHandler(){
-                if(this.todo.trim().length >= 3){
-                    this.emitter.emit("add-todo", {id : new Date().getTime, todo: this.todo, completed : false});
-                    this.todo = "";
-                }else{
-                    alert("3자 이상 입력");
-                }
-            }
+<script setup>
+    import { ref } from 'vue';
+
+    const emit = defineEmits(['add-todo']);
+
+    const todo = ref("");
+    const addTodoHandler = () => {
+        if(todo.value.length>=3){
+            emit('add-todo', todo.value);
+            todo.value = "";
         }
-    }
+}
+     
 </script>
 
 <style scoped>

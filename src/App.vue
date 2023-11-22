@@ -1,49 +1,40 @@
 <template>
-  <div>
-    <InputTodo/>
-    <TodoList :todoList="todoList"/>
-  </div>
-</template>
+    <div>
+      <InputTodo @add-todo="addTodo"/>
+      <TodoList :todoList="state.todoList" @delete-todo="deleteTodo" @toggle-completed="toggleCompleted"/>
+    </div>
+  </template>
+  
+  <script setup>
+  import { onMounted, reactive } from 'vue';
+  import InputTodo from './components/InputTodo.vue';
+  import TodoList from './components/TodoList.vue';
+    const ts = new Date().getTime();
+    const state = reactive({todoList : []});
+    onMounted(() => {
+        state.todoList.push({id : ts, todo:"H", completed: false});
+        state.todoList.push({id : ts+1, todo:"g", completed: false});
+        state.todoList.push({id : ts+2, todo:"k", completed: true});
+        state.todoList.push({id : ts+3, todo:"o", completed: false});
+    });
 
-<script>
-import InputTodo from './components/InputTodo.vue';
-import TodoList from './components/TodoList.vue';
-
-  let ts = new Date().getTime();
-
-  export default {
-    name: "App",
-    data() {
-        return {
-            todoList: [
-                {id : ts, todo:"H", completed: false},
-                {id : ts+1, todo:"g", completed: false},
-                {id : ts+2, todo:"k", completed: true},
-                {id : ts+3, todo:"o", completed: false}
-            ]
-        };
-    },
-    created(){
-        this.emitter.on('add-todo', this.addTodo);
-        this.emitter.on('delete-todo', this.deleteTodo);
-        this.emitter.on('toggle-completed', this.toggleCompleted);
-    },
-    methods: {
-        addTodo(todo) {
-            this.todoList.push(todo);
-        },
-        deleteTodo(id) {
-            this.todoList = this.todoList.filter(todo => todo.id !== id);
-        },
-        toggleCompleted(id) {
-            let index = this.todoList.findIndex(todo => todo.id === id);
-            this.todoList[index].completed = !this.todoList[index].completed;
+    const addTodo = (todo) => {
+        if(todo.length >= 2){
+            state.todoList.push({id : new Date().getTime(), todo : todo, completed : false});
         }
-    },
-    components: { InputTodo, TodoList }
-}
-</script>
+    }
 
-<style scoped>
+    const deleteTodo = (id) => {
+        let index = state.todoList.findIndex(todo => todo.id === id);
+        state.todoList.splice(index, 1);
+    }
 
-</style>
+    const toggleCompleted = (id) => {
+        let index = state.todoList.findIndex(todo => todo.id === id);
+        state.todoList[index].completed = !state.todoList[index].completed;
+    }
+  </script>
+  
+  <style scoped>
+  
+  </style>
